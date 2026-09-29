@@ -1,0 +1,28 @@
+{
+  "name": "NexusHunt",
+  "short_name": "NexusHunt",
+  "description": "Cryptographic campus treasure hunt — Zairzest 6.0",
+  "theme_color": "#0A0B0D",
+  "background_color": "#0A0B0D",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/player",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

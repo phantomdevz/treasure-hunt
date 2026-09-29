@@ -49,6 +49,16 @@ export default function TeamRegistrationForm() {
         const cp = checkpoints.find((c) => c.id === route[i]);
         if (!cp) continue;
 
+        // The next station in this team's assigned route
+        const nextCp = (i + 1 < route.length)
+          ? checkpoints.find((c) => c.id === route[i + 1])
+          : null;
+
+        // Clue revealed after solving riddle i leads to route[i + 1]
+        const nextClueText = nextCp
+          ? (nextCp.nextDestinationLabel || (nextCp.building ? `Head to ${nextCp.building}` : `Proceed to Station ${i + 2}`))
+          : "All checkpoints cleared! Report to HQ to claim victory.";
+
         const entry = {
           index: i,
           checkpointId: cp.id,
@@ -58,7 +68,8 @@ export default function TeamRegistrationForm() {
           answerHashHex: cp.answerHashHex || "",
           plaintextRiddle: cp.riddleText || "",
           plaintextHints: cp.hints || [],
-          nextDestLabelPlaintext: cp.nextDestinationLabel || "",
+          stationClue: cp.nextDestinationLabel || (cp.building ? `Head to ${cp.building}` : cp.name || ""),
+          nextDestLabelPlaintext: nextClueText,
         };
 
         riddles.push(entry);

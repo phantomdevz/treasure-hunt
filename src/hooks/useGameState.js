@@ -54,6 +54,23 @@ export function useGameState(team) {
           }
         }
         if (pack) {
+          // Normalize mission packs so nextDestLabelPlaintext always points to the next checkpoint in the route
+          if (pack.riddles && pack.riddles.length > 0 && !pack.riddles[0].stationClue) {
+            pack.riddles = pack.riddles.map((r, i) => {
+              const stationClue = r.nextDestLabelPlaintext || (r.building ? `Head to ${r.building}` : r.name || "");
+              const nextRiddle = pack.riddles[i + 1];
+              const nextClueText = nextRiddle
+                ? (nextRiddle.nextDestLabelPlaintext || (nextRiddle.building ? `Head to ${nextRiddle.building}` : `Proceed to Station ${i + 2}`))
+                : "All checkpoints cleared! Report to HQ to claim victory.";
+              return {
+                ...r,
+                stationClue,
+                nextDestLabelPlaintext: nextClueText,
+              };
+            });
+            savePackDexie(pack).catch(() => {});
+          }
+
           packRef.current = pack;
           setPack(pack);
           const initialIdx = team.currentCheckpointIndex ?? 0;
@@ -64,10 +81,17 @@ export function useGameState(team) {
           } else {
             setRiddle(pack.riddles[initialIdx] ?? null);
             setError(null);
-            // Initialize clue from saved session or prior riddle
+            // Initialize clue: for station 0, show the starting station clue;
+            // for station > 0, show prior station's nextDestLabelPlaintext
             let initialClue = team?.currentClue || null;
-            if (!initialClue && initialIdx > 0 && pack.riddles?.[initialIdx - 1]) {
-              initialClue = pack.riddles[initialIdx - 1].nextDestLabelPlaintext || null;
+            if (!initialClue) {
+              if (initialIdx === 0 && pack.riddles?.[0]) {
+                initialClue =
+                  pack.riddles[0].stationClue ||
+                  (pack.riddles[0].building ? `Head to ${pack.riddles[0].building}` : null);
+              } else if (initialIdx > 0 && pack.riddles?.[initialIdx - 1]) {
+                initialClue = pack.riddles[initialIdx - 1].nextDestLabelPlaintext || null;
+              }
             }
             if (initialClue) {
               setCurrentClue(initialClue);

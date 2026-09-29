@@ -195,7 +195,7 @@ export default function WaitingForScan({ riddle, currentIndex, nextClue, onScan 
                     fontWeight: 700,
                   }}
                 >
-                  NEXT STATION CLUE
+                  {currentIndex === 0 ? "STARTING STATION CLUE" : "NEXT STATION CLUE"}
                 </span>
               </div>
               <span

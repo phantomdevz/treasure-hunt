@@ -52,6 +52,8 @@ export default function TeamRegistrationForm() {
         const entry = {
           index: i,
           checkpointId: cp.id,
+          name: cp.name || "",
+          building: cp.building || "",
           secretToken: cp.secretToken || "",
           answerHashHex: cp.answerHashHex || "",
           plaintextRiddle: cp.riddleText || "",

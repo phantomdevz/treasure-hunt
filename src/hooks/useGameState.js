@@ -20,6 +20,7 @@ export function useGameState(team) {
   const [currentIndex, setIdx] = useState(team?.currentCheckpointIndex ?? 0);
   const [currentRiddle, setRiddle] = useState(null);
   const [decryptedNextLabel, setNextLabel] = useState(null);
+  const [currentClue, setCurrentClue] = useState(team?.currentClue || null);
   const [error, setError]     = useState(null);
   const [prevAnswer, setPrevAnswer] = useState(null);
   const { isOnline } = useNetworkStatus();
@@ -28,6 +29,7 @@ export function useGameState(team) {
   const packRef       = useRef(null);
   const idxRef        = useRef(team?.currentCheckpointIndex ?? 0);
   const prevAnswerRef = useRef(null);
+  const clueRef       = useRef(team?.currentClue || null);
 
   const teamId = team?.id || team?.teamId;
 
@@ -35,6 +37,7 @@ export function useGameState(team) {
   useEffect(() => { packRef.current = missionPack; }, [missionPack]);
   useEffect(() => { idxRef.current  = currentIndex; }, [currentIndex]);
   useEffect(() => { prevAnswerRef.current = prevAnswer; }, [prevAnswer]);
+  useEffect(() => { clueRef.current = currentClue; }, [currentClue]);
 
   // Load mission pack from Dexie (with Firestore fallback if online)
   useEffect(() => {
@@ -61,6 +64,15 @@ export function useGameState(team) {
           } else {
             setRiddle(pack.riddles[initialIdx] ?? null);
             setError(null);
+            // Initialize clue from saved session or prior riddle
+            let initialClue = team?.currentClue || null;
+            if (!initialClue && initialIdx > 0 && pack.riddles?.[initialIdx - 1]) {
+              initialClue = pack.riddles[initialIdx - 1].nextDestLabelPlaintext || null;
+            }
+            if (initialClue) {
+              setCurrentClue(initialClue);
+              clueRef.current = initialClue;
+            }
           }
         } else {
           setError("Mission pack not found. Please log out and log in again.");
@@ -110,12 +122,19 @@ export function useGameState(team) {
         });
       }
 
+      // Next QR code has been successfully scanned and decoded: clear previous station clue
+      setCurrentClue(null);
+      clueRef.current = null;
+      if (teamId) {
+        saveTeamSession({ ...team, teamId, currentCheckpointIndex: idx, currentClue: null }).catch(() => {});
+      }
+
       setState(GameState.RIDDLE_ACTIVE);
     } catch (e) {
       setError(e.message);
       setState(GameState.WAITING_FOR_SCAN);
     }
-  }, []);
+  }, [team, teamId]);
 
   // Called when user submits an answer
   const handleAnswer = useCallback(async (answer) => {
@@ -146,6 +165,10 @@ export function useGameState(team) {
         }
       }
       setNextLabel(nextLabel);
+      if (nextLabel) {
+        setCurrentClue(nextLabel);
+        clueRef.current = nextLabel;
+      }
 
       const pack    = packRef.current;
       const idx     = idxRef.current;
@@ -174,7 +197,12 @@ export function useGameState(team) {
       // Persist progress to local Dexie session so reload doesn't reset state
       if (teamId) {
         try {
-          await saveTeamSession({ ...team, teamId, currentCheckpointIndex: nextIdx });
+          await saveTeamSession({
+            ...team,
+            teamId,
+            currentCheckpointIndex: nextIdx,
+            currentClue: nextLabel || null,
+          });
         } catch (err) {
           console.warn("[NexusHunt] Could not update local session:", err);
         }
@@ -225,7 +253,12 @@ export function useGameState(team) {
 
     if (teamId) {
       try {
-        await saveTeamSession({ ...team, teamId, currentCheckpointIndex: nextIdx });
+        await saveTeamSession({
+          ...team,
+          teamId,
+          currentCheckpointIndex: nextIdx,
+          currentClue: clueRef.current || null,
+        });
       } catch (err) {
         console.warn("[NexusHunt] Failed to update local session index:", err);
       }
@@ -237,6 +270,7 @@ export function useGameState(team) {
     setRiddle(decryptedRiddle);
     setError(null);
     setNextLabel(null);
+    // Notice: currentClue remains intact so it displays on WAITING_FOR_SCAN until next QR is decoded
     setState(GameState.WAITING_FOR_SCAN);
   }, [team, teamId]);
 
@@ -245,6 +279,7 @@ export function useGameState(team) {
     currentIndex,
     currentRiddle,
     decryptedNextLabel,
+    currentClue,
     error,
     missionPack,
     handleScan,

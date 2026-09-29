@@ -54,10 +54,14 @@ function MatrixRain() {
   );
 }
 
-export default function WaitingForScan({ riddle, currentIndex, onScan }) {
+export default function WaitingForScan({ riddle, currentIndex, nextClue, onScan }) {
   const [scannerOpen, setScannerOpen] = useState(false);
 
-  const locationHint = riddle?.building || riddle?.nextDestLabelPlaintext || "—";
+  const locationHint =
+    riddle?.building ||
+    riddle?.name ||
+    (currentIndex === 0 && riddle?.nextDestLabelPlaintext) ||
+    "—";
 
   return (
     <div
@@ -68,27 +72,36 @@ export default function WaitingForScan({ riddle, currentIndex, onScan }) {
         borderRadius: "12px",
         background: "var(--bg-secondary)",
         border: "1px solid var(--border)",
-        padding: "2.5rem",
+        padding: "2rem 1.5rem",
         textAlign: "center",
-        minHeight: "400px",
+        minHeight: "420px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: "1.5rem",
+        gap: "1.25rem",
       }}
     >
       <MatrixRain />
 
-      {/* Header */}
-      <div style={{ position: "relative", zIndex: 1 }}>
+      {/* Header & Clue Content */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <p
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "0.7rem",
             color: "var(--text-muted)",
             letterSpacing: "0.15em",
-            marginBottom: "0.5rem",
+            marginBottom: "0.25rem",
           }}
         >
           CHECKPOINT {currentIndex + 1}
@@ -105,16 +118,16 @@ export default function WaitingForScan({ riddle, currentIndex, onScan }) {
           }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           style={{
-            width: "90px",
-            height: "90px",
+            width: "80px",
+            height: "80px",
             borderRadius: "50%",
             background: "rgba(0,255,65,0.06)",
             border: "2px solid var(--green-bright)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            margin: "1rem auto",
-            fontSize: "2.5rem",
+            margin: "0.75rem auto",
+            fontSize: "2.2rem",
           }}
         >
           📷
@@ -123,9 +136,9 @@ export default function WaitingForScan({ riddle, currentIndex, onScan }) {
         <h2
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "1.5rem",
+            fontSize: "1.4rem",
             color: "var(--green-bright)",
-            marginBottom: "0.5rem",
+            marginBottom: "0.35rem",
           }}
         >
           SCAN QR CODE
@@ -135,42 +148,131 @@ export default function WaitingForScan({ riddle, currentIndex, onScan }) {
           style={{
             color: "var(--text-secondary)",
             fontSize: "0.85rem",
-            marginBottom: "0.5rem",
+            marginBottom: "0.75rem",
           }}
         >
-          Find the QR code at your target location
+          Find the station QR code at your target location
         </p>
 
-        {locationHint && locationHint !== "—" && (
-          <div
+        {/* Next Clue / Directive Card — remains visible until next QR is decoded */}
+        {nextClue ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
             style={{
-              background: "rgba(0,255,65,0.05)",
-              border: "1px solid var(--border)",
-              borderRadius: "6px",
-              padding: "0.5rem 1rem",
+              background: "rgba(0, 255, 65, 0.08)",
+              border: "1.5px solid var(--green-bright)",
+              borderRadius: "10px",
+              padding: "1.2rem 1.4rem",
               marginTop: "0.5rem",
+              marginBottom: "0.5rem",
+              boxShadow: "0 0 24px rgba(0, 255, 65, 0.2)",
+              textAlign: "left",
+              maxWidth: "460px",
+              width: "100%",
             }}
           >
-            <span
+            <div
               style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "0.7rem",
-                color: "var(--text-muted)",
-                letterSpacing: "0.1em",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "8px",
+                marginBottom: "0.5rem",
+                borderBottom: "1px solid rgba(0, 255, 65, 0.25)",
+                paddingBottom: "0.4rem",
               }}
             >
-              TARGET LOCATION:{" "}
-            </span>
-            <span
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ fontSize: "1rem" }}>🧭</span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "0.72rem",
+                    color: "var(--green-bright)",
+                    letterSpacing: "0.15em",
+                    fontWeight: 700,
+                  }}
+                >
+                  NEXT STATION CLUE
+                </span>
+              </div>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.65rem",
+                  color: "var(--text-muted)",
+                }}
+              >
+                TARGET #{currentIndex + 1}
+              </span>
+            </div>
+
+            <p
               style={{
                 fontFamily: "var(--font-mono)",
-                color: "var(--green-bright)",
-                fontSize: "0.85rem",
+                color: "var(--text-primary)",
+                fontSize: "1rem",
+                lineHeight: "1.6",
+                margin: 0,
+                fontWeight: 500,
               }}
             >
-              {locationHint}
-            </span>
-          </div>
+              {nextClue}
+            </p>
+
+            <div
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.68rem",
+                color: "var(--text-muted)",
+                marginTop: "0.6rem",
+                borderTop: "1px dashed rgba(0,255,65,0.2)",
+                paddingTop: "0.4rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <span style={{ color: "var(--green-bright)" }}>▷</span>
+              <span>Find this location and scan the station QR code below.</span>
+            </div>
+          </motion.div>
+        ) : (
+          locationHint && locationHint !== "—" && (
+            <div
+              style={{
+                background: "rgba(0,255,65,0.05)",
+                border: "1px solid var(--border)",
+                borderRadius: "6px",
+                padding: "0.5rem 1rem",
+                marginTop: "0.5rem",
+                marginBottom: "0.5rem",
+                display: "inline-block",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "0.7rem",
+                  color: "var(--text-muted)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                TARGET LOCATION:{" "}
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--green-bright)",
+                  fontSize: "0.85rem",
+                }}
+              >
+                {locationHint}
+              </span>
+            </div>
+          )
         )}
       </div>
 

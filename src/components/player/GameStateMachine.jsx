@@ -14,6 +14,7 @@ export default function GameStateMachine({ team }) {
     currentIndex,
     currentRiddle,
     decryptedNextLabel,
+    currentClue,
     error,
     missionPack,
     handleScan,
@@ -117,6 +118,7 @@ export default function GameStateMachine({ team }) {
               key="waiting"
               riddle={currentRiddle}
               currentIndex={currentIndex}
+              nextClue={currentClue}
               onScan={handleScan}
               error={error}
             />

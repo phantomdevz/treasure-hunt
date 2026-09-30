@@ -1,8 +1,8 @@
 import Dexie from "dexie";
 
-export class NexusHuntDB extends Dexie {
+export class Route404DB extends Dexie {
   constructor() {
-    super("NexusHuntDB");
+    super("Route404DB");
     this.version(1).stores({
       completionQueue: "++id, teamId, synced",
       missionPacks: "teamId",
@@ -11,7 +11,7 @@ export class NexusHuntDB extends Dexie {
   }
 }
 
-export const db = new NexusHuntDB();
+export const db = new Route404DB();
 
 // ── Completion queue ─────────────────────────
 

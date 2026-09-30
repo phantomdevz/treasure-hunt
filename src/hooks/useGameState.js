@@ -102,7 +102,7 @@ export function useGameState(team) {
           setError("Mission pack not found. Please log out and log in again.");
         }
       } catch (err) {
-        console.warn("[NexusHunt] Error loading mission pack:", err);
+        console.warn("[Route:404] Error loading mission pack:", err);
         setError("Error loading game data: " + (err.message || "Unknown"));
       }
     })();
@@ -116,8 +116,9 @@ export function useGameState(team) {
     setError(null);
     setState(GameState.VERIFYING);
     try {
-      const parts = qrData.split(":");
-      if (parts[0] !== "NEXUSHUNT" || parts.length < 3) {
+      const parts = qrData.trim().split(":");
+      const isSupportedPrefix = parts[0] === "ROUTE404" || parts[0] === "NEXUSHUNT";
+      if (!isSupportedPrefix || parts.length < 3) {
         throw new Error("Invalid QR code format");
       }
       const scannedCheckpointId = parts[1];
@@ -214,7 +215,7 @@ export function useGameState(team) {
             nextIdx >= pack.route.length ? Date.now() : null
           );
         } catch (err) {
-          console.warn("[NexusHunt] Could not update Firestore immediately:", err);
+          console.warn("[Route:404] Could not update Firestore immediately:", err);
         }
       }
 
@@ -228,7 +229,7 @@ export function useGameState(team) {
             currentClue: nextLabel || null,
           });
         } catch (err) {
-          console.warn("[NexusHunt] Could not update local session:", err);
+          console.warn("[Route:404] Could not update local session:", err);
         }
       }
 
@@ -246,7 +247,7 @@ export function useGameState(team) {
     const prevAns = prevAnswerRef.current;
     const nextIdx = idx + 1;
 
-    console.log(`[NexusHunt] handleAdvance: idx=${idx} nextIdx=${nextIdx} routeLen=${pack?.route?.length}`);
+    console.log(`[Route:404] handleAdvance: idx=${idx} nextIdx=${nextIdx} routeLen=${pack?.route?.length}`);
 
     if (!pack || nextIdx >= (pack.route?.length ?? 0)) {
       setState(GameState.COMPLETED);
@@ -266,7 +267,7 @@ export function useGameState(team) {
           );
         }
       } catch (err) {
-        console.warn("[NexusHunt] Decryption fallback to plaintext:", err);
+        console.warn("[Route:404] Decryption fallback to plaintext:", err);
       }
     }
 
@@ -284,7 +285,7 @@ export function useGameState(team) {
           currentClue: clueRef.current || null,
         });
       } catch (err) {
-        console.warn("[NexusHunt] Failed to update local session index:", err);
+        console.warn("[Route:404] Failed to update local session index:", err);
       }
     }
 

@@ -3,8 +3,8 @@ import NavBar from "@/components/layout/NavBar";
 import NetworkStatusBar from "@/components/layout/NetworkStatusBar";
 
 export const metadata = {
-  title: "NexusHunt",
-  description: "Cryptographic campus treasure hunt — Zairza",
+  title: "Route:404",
+  description: "Cryptographic campus treasure hunt",
   manifest: "/manifest.json",
   themeColor: "#0A0B0D",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",

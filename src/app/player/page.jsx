@@ -14,7 +14,7 @@ class PlayerErrorBoundary extends Component {
     return { hasError: true, error };
   }
   componentDidCatch(error, errorInfo) {
-    console.error("[NexusHunt] Player Page Component Error:", error, errorInfo);
+    console.error("[Route:404] Player Page Component Error:", error, errorInfo);
   }
   render() {
     if (this.state.hasError) {
@@ -57,7 +57,7 @@ class PlayerErrorBoundary extends Component {
             <button
               onClick={async () => {
                 try {
-                  indexedDB.deleteDatabase("NexusHuntDB");
+                  indexedDB.deleteDatabase("Route404DB");
                 } catch {}
                 window.location.reload();
               }}
@@ -98,7 +98,7 @@ export default function PlayerPage() {
       .catch((err) => {
         if (!isMounted) return;
         clearTimeout(timer);
-        console.warn("[NexusHunt] Could not load offline session:", err);
+        console.warn("[Route:404] Could not load offline session:", err);
         setLoading(false);
       });
 

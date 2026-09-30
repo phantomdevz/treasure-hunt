@@ -21,7 +21,7 @@ async function deriveKey(passphrase) {
   return crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
-      salt: new TextEncoder().encode("nexushunt-2026"),
+      salt: new TextEncoder().encode("route404-2026"),
       iterations: 100_000,
       hash: "SHA-256",
     },

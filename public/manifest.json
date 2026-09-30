@@ -1,7 +1,7 @@
 {
-  "name": "NexusHunt",
-  "short_name": "NexusHunt",
-  "description": "Cryptographic campus treasure hunt — Zairzest 6.0",
+  "name": "Route:404",
+  "short_name": "Route:404",
+  "description": "Cryptographic campus treasure hunt",
   "theme_color": "#0A0B0D",
   "background_color": "#0A0B0D",
   "display": "standalone",

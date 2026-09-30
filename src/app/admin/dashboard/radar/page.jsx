@@ -15,7 +15,7 @@ export default function RadarPage() {
             transform: "rotate(-10deg)",
             borderRadius: "1px",
           }} />
-          <span className="section-label">NexusHunt</span>
+          <span className="section-label">Route:404</span>
         </div>
         <h1 style={{
           fontFamily: "var(--font-display)",

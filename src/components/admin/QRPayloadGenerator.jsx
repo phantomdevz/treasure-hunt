@@ -16,7 +16,7 @@ function QRCard({
 }) {
   const canvasRef = useRef(null);
 
-  const payload = `NEXUSHUNT:${checkpoint.id}:${checkpoint.secretToken}`;
+  const payload = `ROUTE404:${checkpoint.id}:${checkpoint.secretToken}`;
 
   useEffect(() => {
     if (!canvasRef.current) return;

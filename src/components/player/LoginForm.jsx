@@ -58,7 +58,7 @@ export default function LoginForm({ onLogin }) {
             transform: "rotate(-10deg)",
             borderRadius: "1px",
           }} />
-          <span className="section-label">Nexushunt</span>
+          <span className="section-label">Route:404</span>
         </div>
 
         <h1

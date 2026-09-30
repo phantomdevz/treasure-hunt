@@ -32,11 +32,11 @@ export const hasFirebaseConfig = Boolean(
 if (typeof window !== "undefined") {
   if (!hasFirebaseConfig) {
     console.warn(
-      "[NexusHunt] Firebase credentials not configured. Please add your Firebase credentials to .env.local"
+      "[Route:404] Firebase credentials not configured. Please add your Firebase credentials to .env.local"
     );
   } else {
     console.log(
-      "[NexusHunt] Loaded Firebase project:",
+      "[Route:404] Loaded Firebase project:",
       process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
       "| API Key prefix:",
       (process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "").substring(0, 8) + "..."

@@ -1,6 +1,6 @@
-# NexusHunt 🔐
+# Route:404 🔐
 
-> **Cryptographic campus treasure hunt PWA** — Zairzest 6.0 by Zairza
+> **Cryptographic campus treasure hunt PWA**
 
 A production-ready Progressive Web Application for large-scale university tech treasure hunts. Features a **Matrix/terminal hacker aesthetic** with black & neon green design.
 
@@ -174,4 +174,4 @@ PWA service worker and manifest are automatically generated in `public/`.
 
 ---
 
-*Built for Zairza — Zairzest 6.0*
+*Built for Route:404*

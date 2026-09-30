@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 export default function GlobalError({ error, reset }) {
   useEffect(() => {
-    console.error("[NexusHunt Error]", error);
+    console.error("[Route:404 Error]", error);
   }, [error]);
 
   return (
@@ -61,7 +61,7 @@ export default function GlobalError({ error, reset }) {
           <button
             onClick={() => {
               if (typeof window !== "undefined") {
-                indexedDB.deleteDatabase("NexusHuntDB");
+                indexedDB.deleteDatabase("Route404DB");
                 window.location.href = "/player";
               }
             }}

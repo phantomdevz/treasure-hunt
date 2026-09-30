@@ -1,7 +1,7 @@
 import CheckpointManager from "@/components/admin/CheckpointManager";
 
 export const metadata = {
-  title: "Checkpoints — NexusHunt Admin",
+  title: "Checkpoints — Route:404 Admin",
 };
 
 export default function CheckpointsPage() {

@@ -15,9 +15,9 @@ export function useOfflineSync() {
         if (events.length === 0) return;
         await pushCompletionEvents(events);
         await markSynced(events.map((e) => e.id));
-        console.log(`[NexusHunt] Synced ${events.length} events to Firestore`);
+        console.log(`[Route:404] Synced ${events.length} events to Firestore`);
       } catch (err) {
-        console.warn("[NexusHunt] Sync failed:", err);
+        console.warn("[Route:404] Sync failed:", err);
       }
     })();
   }, [isOnline]);

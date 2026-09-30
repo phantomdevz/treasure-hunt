@@ -112,7 +112,7 @@ export default function DashboardOverview() {
             transform: "rotate(-10deg)",
             borderRadius: "1px",
           }} />
-          <span className="section-label">Nexushunt</span>
+          <span className="section-label">Route:404</span>
         </div>
         <motion.h1
           initial={{ opacity: 0, x: -16 }}

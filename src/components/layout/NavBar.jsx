@@ -32,7 +32,7 @@ export default function NavBar() {
         backdropFilter: "blur(12px)",
       }}
     >
-      {/* Wordmark — logo lockup only, Zairza brand stays here */}
+      {/* Wordmark */}
       <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
         {/* Tick-mark motif beside logo */}
         <span style={{
@@ -53,7 +53,7 @@ export default function NavBar() {
             letterSpacing: "0.06em",
           }}
         >
-          NEXUS<span style={{ color: "var(--steel)", fontWeight: 400 }}>HUNT</span>
+          ROUTE<span style={{ color: "var(--steel)", fontWeight: 400 }}>:404</span>
         </span>
       </Link>
 

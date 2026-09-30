@@ -18,7 +18,7 @@ function MatrixRain() {
 
     const cols = Math.max(1, Math.floor(canvas.width / 16));
     const drops = Array(cols).fill(1);
-    const chars = "NEXUSHUNT01アイウエオカキクケコサシスセソ0123456789ABCDEF".split("");
+    const chars = "ROUTE40401アイウエオカキクケコサシスセソ0123456789ABCDEF".split("");
 
     const draw = () => {
       if (!ctx || !canvas) return;

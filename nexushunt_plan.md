@@ -1,10 +1,10 @@
-# NexusHunt PWA — Implementation Plan
+# Route:404 PWA — Implementation Plan
 
 > **✅ Theme**: Black & Neon Green — terminal/Matrix hacker aesthetic. Deep black backgrounds, neon `#00ff41` green accents, green-on-black monospace text, CRT scanline overlay, phosphor-glow effects.
 
 ## Goal Description
 
-Build **NexusHunt**, a production-ready Progressive Web Application for a large-scale university tech treasure hunt. The app delivers a **cinematic, offline-first** experience with two distinct roles:
+Build **Route:404**, a production-ready Progressive Web Application for a large-scale university tech treasure hunt. The app delivers a **cinematic, offline-first** experience with two distinct roles:
 
 - **Player Mobile PWA**: Sequential cryptographic gameplay — scan QR codes, solve riddles, unlock next destinations via AES-256-GCM decryption.
 - **Admin Command Center**: Team registration with Latin Square routing, live campus radar grid, and QR payload generator.
@@ -130,7 +130,7 @@ src/
 │   └── sync.ts                     # Background sync (Dexie → Firestore)
 │                                   # ✅ NO constants.ts — checkpoints live in Firestore
 ├── types/
-│   └── nexushunt.ts                # All TypeScript interfaces
+│   └── route404.ts                 # All TypeScript interfaces
 │
 └── hooks/
     ├── useNetworkStatus.ts         # Online/offline + manual override
@@ -144,7 +144,7 @@ src/
 
 ### Core TypeScript Interfaces
 
-#### [NEW] `src/types/nexushunt.ts`
+#### [NEW] `src/types/route404.ts`
 
 ```typescript
 /**
@@ -263,7 +263,7 @@ async function deriveKey(passphrase: string): Promise<CryptoKey> {
   return crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
-      salt: new TextEncoder().encode("nexushunt-2026"),
+      salt: new TextEncoder().encode("route404-2026"),
       iterations: 100_000,
       hash: "SHA-256",
     },
@@ -288,7 +288,7 @@ export async function decrypt(ciphertextB64: string, passphrase: string): Promis
 #### [NEW] `src/lib/routing.ts`
 
 ```typescript
-import type { Checkpoint } from "@/types/nexushunt";
+import type { Checkpoint } from "@/types/route404";
 
 /**
  * Assigns a non-colliding circular route for team k.
@@ -328,14 +328,14 @@ export function nextTeamIndex(
 
 ```typescript
 import Dexie, { type Table } from "dexie";
-import type { CompletionEvent, MissionPack } from "@/types/nexushunt";
+import type { CompletionEvent, MissionPack } from "@/types/route404";
 
-export class NexusHuntDB extends Dexie {
+export class Route404DB extends Dexie {
   completionQueue!: Table<CompletionEvent>;
   missionPacks!: Table<MissionPack & { id: string }>;
 
   constructor() {
-    super("NexusHuntDB");
+    super("Route404DB");
     this.version(1).stores({
       completionQueue: "++id, teamId, synced",
       missionPacks: "teamId",
@@ -343,7 +343,7 @@ export class NexusHuntDB extends Dexie {
   }
 }
 
-export const db = new NexusHuntDB();
+export const db = new Route404DB();
 
 // Queue a completion event
 export async function queueCompletion(event: Omit<CompletionEvent, "id" | "synced">) {
@@ -455,8 +455,8 @@ export default withPWA({
 
 ```json
 {
-  "name": "NexusHunt",
-  "short_name": "NexusHunt",
+  "name": "Route:404",
+  "short_name": "Route:404",
   "theme_color": "#0f172a",
   "background_color": "#0f172a",
   "display": "standalone",
@@ -663,7 +663,7 @@ This is the core dynamic feature — a full CRUD dashboard for checkpoints:
 
 #### `QRPayloadGenerator.tsx`
 - Reads all checkpoints dynamically from Firestore
-- For each: renders `qrcode` canvas with payload `NEXUSHUNT:<station_id>:<secretToken>`
+- For each: renders `qrcode` canvas with payload `ROUTE404:<station_id>:<secretToken>`
 - "Download PNG" button per QR code
 - "Print All" button → `window.print()` with print stylesheet
 
